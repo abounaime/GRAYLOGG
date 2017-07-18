@@ -43,6 +43,7 @@ PluginStore.exports('routes').forEach((pluginRoute) => {
 
 const Routes = {
   STARTPAGE: '/',
+  HOME: '/home',
   SEARCH: '/search',
   STREAMS: '/streams',
   ALERTS: {

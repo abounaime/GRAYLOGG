@@ -20,6 +20,7 @@ interface Dashboard {
   description: string;
   title: string;
   content_pack: string;
+  isFavoriteDash : boolean;
 }
 
 class DashboardsStore {
@@ -150,8 +151,34 @@ class DashboardsStore {
 
   saveDashboard(dashboard: Dashboard): Promise<string[]> {
     const url = URLUtils.qualifyUrl(ApiRoutes.DashboardsApiController.update(dashboard.id).url);
-    const promise = fetch('PUT', url, {title: dashboard.title, description: dashboard.description});
+    const promise = fetch('PUT', url, {title: dashboard.title, description: dashboard.description, isFavoriteDash: dashboard.isFavoriteDash });
+    promise.then(() => {
+      UserNotification.success("Dashboard successfully updated");
+      this.updateWritableDashboards();
+    }, (error) => {
+      UserNotification.error("Saving dashboard \"" + dashboard.title + "\" failed with status: " + error,
+        "Could not save dashboard");
+    });
 
+    return promise;
+  }
+  addToFavoriteDash(dashboard: Dashboard): Promise<string[]> {
+    dashboard.isFavoriteDash=true
+    const url = URLUtils.qualifyUrl(ApiRoutes.DashboardsApiController.update(dashboard.id).url);
+    const promise = fetch('PUT', url, {title: dashboard.title, description: dashboard.description, isFavoriteDash: true });
+    promise.then(() => {
+      UserNotification.success("Dashboard successfully updated");
+      this.updateWritableDashboards();
+    }, (error) => {
+      UserNotification.error("Saving dashboard \"" + dashboard.title + "\" failed with status: " + error,
+        "Could not save dashboard");
+    });
+
+    return promise;
+  }
+  removeFromFavoiteDash(dashboard: Dashboard): Promise<string[]> {
+    const url = URLUtils.qualifyUrl(ApiRoutes.DashboardsApiController.update(dashboard.id).url);
+    const promise = fetch('PUT', url, {title: dashboard.title, description: dashboard.description, isFavoriteDash: false });
     promise.then(() => {
       UserNotification.success("Dashboard successfully updated");
       this.updateWritableDashboards();

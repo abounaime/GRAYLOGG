@@ -9,7 +9,7 @@ import history from 'util/History';
 import URLUtils from 'util/URLUtils';
 
 import Routes from 'routing/Routes';
-
+import HomePage from 'pages/HomePage.jsx';
 import StartPage from 'pages/StartPage';
 import SearchPage from 'pages/SearchPage';
 import ShowMessagePage from 'pages/ShowMessagePage';
@@ -72,6 +72,7 @@ const AppRouter = React.createClass({
         <Route path={Routes.STARTPAGE} component={App}>
           <IndexRoute component={StartPage} />
           <Route component={AppWithSearchBar}>
+            <Route path={Routes.HOME} component={HomePage}/>
             <Route path={Routes.SEARCH} component={SearchPage} />
             <Route path={Routes.message_show(':index', ':messageId')} component={ShowMessagePage} />
             <Route path={Routes.SOURCES} component={SourcesPage} />
