@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.graylog.jest:jest:2.4.5+jackson">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/graylog/jest/jest/2.4.5+jackson/jest-2.4.5+jackson.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/graylog/jest/jest/2.4.5+jackson/jest-2.4.5+jackson-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/graylog/jest/jest/2.4.5+jackson/jest-2.4.5+jackson-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
