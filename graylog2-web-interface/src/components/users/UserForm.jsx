@@ -30,6 +30,7 @@ const UserForm = React.createClass({
     return {
       streams: undefined,
       dashboards: undefined,
+      roles: undefined,
       user: this._getUserStateFromProps(this.props),
     };
   },
@@ -54,6 +55,7 @@ const UserForm = React.createClass({
 
   _getUserStateFromProps(props) {
     return {
+      username: props.user.username,
       full_name: props.user.full_name,
       email: props.user.email,
       session_timeout_ms: props.user.session_timeout_ms,
@@ -61,7 +63,6 @@ const UserForm = React.createClass({
       permissions: props.user.permissions,
       read_only: props.user.read_only,
       external: props.user.external,
-      roles: props.user.roles,
     };
   },
 
@@ -106,7 +107,7 @@ const UserForm = React.createClass({
 
   _updateUser(evt) {
     evt.preventDefault();
-
+    console.log(this.props.user.username)
     UsersStore.update(this.props.user.username, this.state.user).then(() => {
       UserNotification.success('User updated successfully.', 'Success');
       if (this.isPermitted(this.state.currentUser.permissions, ['users:list'])) {
@@ -207,7 +208,7 @@ const UserForm = React.createClass({
             <h2>User information</h2>
             <form className="form-horizontal user-form" id="edit-user-form" onSubmit={this._updateUser}>
               {user.read_only &&
-                <span>
+              <span>
                   <Col smOffset={3} sm={9}>
                     <Alert bsStyle="warning" role="alert">
                       The admin user can only be modified in your Graylog server configuration file.
@@ -218,6 +219,11 @@ const UserForm = React.createClass({
                 </span>
               }
               <fieldset disabled={user.read_only}>
+                <Input name="username" id="username" type="text" maxLength={200} value={user.username}
+                       onChange={this._bindValue} labelClassName="col-sm-3" wrapperClassName="col-sm-9"
+                       label="Username" help="Give a descriptive name for this account, e.g. the user name."
+                       required />
+
                 <Input name="full_name" id="full_name" type="text" maxLength={200} value={user.full_name}
                        onChange={this._bindValue} labelClassName="col-sm-3" wrapperClassName="col-sm-9"
                        label="Full Name" help="Give a descriptive name for this account, e.g. the full name."
@@ -301,39 +307,39 @@ const UserForm = React.createClass({
             {user.read_only ?
               <Col smOffset={3} sm={9}>
                 <Alert bsStyle="warning" role="alert">
-                Please edit your Graylog server configuration file to change the admin password.
-              </Alert>
+                  Please edit your Graylog server configuration file to change the admin password.
+                </Alert>
               </Col>
-            :
+              :
               user.external ?
                 <Col smOffset={3} sm={9}>
                   <Alert bsStyle="warning" role="alert">
-                  This user was created from an external system and you can't change the password here.
-                  Please contact an administrator for more information.
-                </Alert>
+                    This user was created from an external system and you can't change the password here.
+                    Please contact an administrator for more information.
+                  </Alert>
                 </Col>
-              :
+                :
                 <form className="form-horizontal" style={{ marginTop: 10 }} onSubmit={this._changePassword}>
                   {requiresOldPassword &&
                   <Input ref="old_password" name="old_password" id="old_password" type="password" maxLength={100}
                          labelClassName="col-sm-3" wrapperClassName="col-sm-9"
                          label="Old Password" required />
-                }
+                  }
                   <Input ref="password" name="password" id="password" type="password" maxLength={100}
-                       labelClassName="col-sm-3" wrapperClassName="col-sm-9"
-                       label="New Password" required minLength="6"
-                       help="Passwords must be at least 6 characters long. We recommend using a strong password."
-                       onChange={this._onPasswordChange} />
+                         labelClassName="col-sm-3" wrapperClassName="col-sm-9"
+                         label="New Password" required minLength="6"
+                         help="Passwords must be at least 6 characters long. We recommend using a strong password."
+                         onChange={this._onPasswordChange} />
 
                   <Input ref="password_repeat" name="password_repeat" id="password_repeat" type="password" maxLength={100}
-                       labelClassName="col-sm-3" wrapperClassName="col-sm-9"
-                       label="Repeat Password" required minLength="6" onChange={this._onPasswordChange} />
+                         labelClassName="col-sm-3" wrapperClassName="col-sm-9"
+                         label="Repeat Password" required minLength="6" onChange={this._onPasswordChange} />
 
                   <div className="form-group">
                     <Col smOffset={3} sm={9}>
                       <Button bsStyle="primary" type="submit" className="save-button-margin">
-                      Update Password
-                    </Button>
+                        Update Password
+                      </Button>
                       <Button onClick={this._onCancel}>Cancel</Button>
                     </Col>
                   </div>
