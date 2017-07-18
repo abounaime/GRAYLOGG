@@ -60,6 +60,7 @@ import IndexSetCreationPage from 'pages/IndexSetCreationPage';
 import LUTTablesPage from 'pages/LUTTablesPage';
 import LUTCachesPage from 'pages/LUTCachesPage';
 import LUTDataAdaptersPage from 'pages/LUTDataAdaptersPage';
+import UsersAndStreamsPage from 'pages/UsersAndStreamsPage.jsx';
 
 const AppRouter = React.createClass({
   render() {
@@ -78,6 +79,7 @@ const AppRouter = React.createClass({
             <Redirect from={Routes.legacy_stream_search(':streamId')} to={Routes.stream_search(':streamId')} />
           </Route>
           <Route component={AppWithoutSearchBar}>
+            <Route path={Routes.USERSANDSTREAMS} component={UsersAndStreamsPage}/>
             <Route path={Routes.GETTING_STARTED} component={GettingStartedPage} />
             <Route path={Routes.STREAMS} component={StreamsPage} />
             <Route path={Routes.stream_edit(':streamId')} component={StreamEditPage} />

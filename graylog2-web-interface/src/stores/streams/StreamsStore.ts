@@ -10,6 +10,7 @@ interface Stream {
   description: string;
   remove_matches_from_default_stream: boolean;
   isDefaultStream: boolean;
+  isFavoriteStream: boolean;
   creatorUser: string;
   createdAt: number;
 }
@@ -30,15 +31,26 @@ interface StreamSummaryResponse {
 
 class StreamsStore {
   private callbacks: Array<Callback> = [];
+  listStreamsForAllUsers() {
+    const url = "/streams/list";
+    const promise = fetch('GET', URLUtils.qualifyUrl(url))
+      .then((result: StreamSummaryResponse) => result.streams)
+      .catch((errorThrown) => {
+        UserNotification.error("Loading streams failed with status: " + errorThrown,
+          "Could not load streams");
+      });
+    return promise;
+  }
 
   listStreams() {
     const url = "/streams";
     const promise = fetch('GET', URLUtils.qualifyUrl(url))
-        .then((result: StreamSummaryResponse) => result.streams)
-        .catch((errorThrown) => {
-          UserNotification.error("Loading streams failed with status: " + errorThrown,
-              "Could not load streams");
-        });
+      .then((result: StreamSummaryResponse) => result.streams)
+      .catch((errorThrown) => {
+        UserNotification.error("Loading streams failed with status: " + errorThrown,
+          "Could not load streams");
+      });
+
     return promise;
   }
   load(callback: ((streams: Array<Stream>) => void)) {
@@ -112,6 +124,29 @@ class StreamsStore {
     fetch('PUT', url, data)
       .then(callback, failCallback).then(this._emitChange.bind(this));
   }
+
+  modif(streamId: string, data: any, callback: (() => void)) {
+    const failCallback = (errorThrown) => {
+      UserNotification.error("Updating Stream failed with status: " + errorThrown,
+        "Could not update Stream");
+    };
+
+    const url = URLUtils.qualifyUrl(ApiRoutes.StreamsApiController.modif(streamId).url);
+    fetch('PUT', url, data)
+      .then(callback, failCallback).then(this._emitChange.bind(this));
+  }
+
+  addToFav(streamId: string, data: any, callback: (() => void)) {
+    const failCallback = (errorThrown) => {
+      UserNotification.error("Updating Stream failed with status: " + errorThrown,
+        "Could not update Stream");
+    };
+
+    const url = URLUtils.qualifyUrl(ApiRoutes.StreamsApiController.addToFav(streamId).url);
+    fetch('PUT', url, data)
+      .then(callback, failCallback).then(this._emitChange.bind(this));
+  }
+
   cloneStream(streamId: string, data: any, callback: (() => void)) {
     const failCallback = (errorThrown) => {
       UserNotification.error("Cloning Stream failed with status: " + errorThrown,
@@ -157,4 +192,3 @@ class StreamsStore {
 
 const streamsStore = new StreamsStore();
 export = streamsStore;
-

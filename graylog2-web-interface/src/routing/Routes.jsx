@@ -54,6 +54,7 @@ const Routes = {
   },
   SOURCES: '/sources',
   DASHBOARDS: '/dashboards',
+  USERSANDSTREAMS: '/UsersAndStreams',
   GETTING_STARTED: '/gettingstarted',
   SYSTEM: {
     CONFIGURATIONS: '/system/configurations',

@@ -171,7 +171,9 @@ const Navigation = React.createClass({
                 <NavItem>Sources</NavItem>
               </LinkContainer>
             </IfPermitted>
-
+            <LinkContainer to={Routes.USERSANDSTREAMS}>
+              <NavItem >Users</NavItem>
+            </LinkContainer>
             {pluginNavigations}
 
             {/*
